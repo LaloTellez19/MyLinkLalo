@@ -1,0 +1,2 @@
+- Al tocar cualquier video se cambia por el del centro
+- al llamar un grupo, el listado de agregar solo muestra al grupo

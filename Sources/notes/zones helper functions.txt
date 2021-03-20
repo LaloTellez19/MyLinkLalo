@@ -1,0 +1,11 @@
+var _getId = (key) => {
+    this._database.where("id", "==", key).get().then((a) => { a.forEach((b) => {console.warn(b.data().title, b.id)}) })
+}
+
+var _search = (term) => {
+	this._data.forEach((a, i) => {
+		if(a.title.toLowerCase().indexOf(term) > -1){
+			console.warn(i, a.title, a)
+		}
+	})
+}

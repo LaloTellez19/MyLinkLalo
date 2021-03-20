@@ -1,0 +1,14 @@
+/chat
+/email/compose/
+/profile/
+/call
+/videocall
+/map
+/share
+/actionmenu
+/scanner
+/radar
+/create-ticket
+/camera
+/cards
+/extreceive

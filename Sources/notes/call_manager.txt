@@ -1,0 +1,101 @@
+incallmanager_busytone.mp3  
+incallmanager_ringback.mp3  
+incallmanager_ringtone.mp3 
+
+import InCallManager from 'react-native-incall-manager';
+
+InCallManager.start({media: 'audio'}); // audio/video, default: audio
+InCallManager.stop();
+
+InCallManager.start({media: 'audio', ringback: '_BUNDLE_'}); // or _DEFAULT_ or _DTMF_
+InCallManager.stopRingback();
+
+InCallManager.stop({busytone: '_DTMF_'}); // or _BUNDLE_ or _DEFAULT_
+
+InCallManager.startRingtone('_BUNDLE_'); // or _DEFAULT_ or system filename with extension
+
+// when user pickup
+InCallManager.stopRingtone();
+InCallManager.start();
+
+// or user hangup
+InCallManager.stopRingtone();
+InCallManager.stop();
+
+
+if (InCallManager.recordPermission !== 'granted') {
+    InCallManager.requestRecordPermission()
+    .then((requestedRecordPermissionResult) => {
+        console.log("InCallManager.requestRecordPermission() requestedRecordPermissionResult: ", requestedRecordPermissionResult);
+    })
+    .catch((err) => {
+        console.log("InCallManager.requestRecordPermission() catch: ", err);
+    });
+}
+
+let isFront = true;
+mediaDevices.enumerateDevices().then(sourceInfos => {
+  console.log(sourceInfos);
+  let videoSourceId;
+  for (let i = 0; i < sourceInfos.length; i++) {
+    const sourceInfo = sourceInfos[i];
+    if(sourceInfo.kind == "videoinput" && sourceInfo.facing == (isFront ? "front" : "environment")) {
+      videoSourceId = sourceInfo.deviceId;
+    }
+  }
+  mediaDevices.getUserMedia({
+    audio: true,
+    video: {
+      mandatory: {
+        minWidth: 500, // Provide your own width, height and frame rate here
+        minHeight: 300,
+        minFrameRate: 30
+      },
+      facingMode: (isFront ? "user" : "environment"),
+      optional: (videoSourceId ? [{sourceId: videoSourceId}] : [])
+    }
+  })
+  .then(stream => {
+    // Got stream!
+  })
+  .catch(error => {
+    // Log error
+  });
+});
+
+pc.createOffer().then(desc => {
+  pc.setLocalDescription(desc).then(() => {
+    // Send pc.localDescription to peer
+  });
+});
+
+pc.onicecandidate = function (event) {
+  // send event.candidate to peer
+};
+
+
+<RTCView streamURL={this.state.stream.toURL()} mirror={true} objectFit={'contain'}/>
+
+
+// also support setRemoteDescription, createAnswer, addIceCandidate, onnegotiationneeded, oniceconnectionstatechange, onsignalingstatechange, onaddstream
+
+
+
+
+import RNCallKeep from 'react-native-callkeep';
+
+const options = {
+  ios: {
+    appName: 'My app name',
+  },
+  android: {
+    alertTitle: 'Permissions required',
+    alertDescription: 'This application needs to access your phone accounts',
+    cancelButton: 'Cancel',
+    okButton: 'ok',
+    imageName: 'phone_account_icon',
+    additionalPermissions: [PermissionsAndroid.PERMISSIONS.example]
+  }
+};
+
+RNCallKeep.setup(options).then(accepted => {});
